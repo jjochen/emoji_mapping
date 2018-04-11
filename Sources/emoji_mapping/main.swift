@@ -39,17 +39,19 @@ do {
     let separators = CharacterSet(charactersIn: "\n\t\\|,;: ")
     let emojis = try String(contentsOf: emojisURL, encoding: .utf8).components(separatedBy: separators)
 
-    var mappedEmojies = [Emoji]()
+    var unmappedEmojis = emojis
+    var mappedEmojis = [Emoji]()
     emojiMapping.forEach { emoji in
         if emojis.contains(emoji.unicode) {
             print("\(emoji.shortname) \(emoji.unicode)")
-            mappedEmojies.append(emoji)
+            mappedEmojis.append(emoji)
+            unmappedEmojis = unmappedEmojis.filter { $0 != emoji.unicode }
         }
     }
     print("")
 
     var results: [String] = []
-    mappedEmojies.forEach { emoji in
+    mappedEmojis.forEach { emoji in
         switch type {
         case .enumDefinitions:
             results.append(emoji.enumDefinition)
@@ -64,6 +66,10 @@ do {
     print(resultString)
     print("")
     print("Copied to pastboard!")
+
+    if unmappedEmojis.count > 0 {
+        print("Not mapped: \(unmappedEmojis.joined(separator: ", "))")
+    }
 
     let pasteboard = NSPasteboard.general
     pasteboard.clearContents()

@@ -9,12 +9,13 @@ import Foundation
 
 class Emoji: Decodable, Encodable {
     var annotation: String
-    var group: Int
+//    var group: Int
     var hexcode: String
-    var order: Int
+//    var order: Int
     var shortcodes: [String]
-    var tags: [String]
+//    var tags: [String]?
     var unicode: String
+//    var skins: [Emoji]?
 
     var shortname: String {
         if let userDefaultsValue = UserDefaults.standard.string(forKey: userDefaultShortNameKey) {
@@ -41,7 +42,7 @@ class Emoji: Decodable, Encodable {
         components.forEach { component in
             keySuffix.append(component.capitalized)
         }
-        return "Key_\(keySuffix)"
+        return "Key_Emoji\(keySuffix)"
     }
 
     var enumName: String {
@@ -49,11 +50,11 @@ class Emoji: Decodable, Encodable {
     }
 
     var enumDefinition: String {
-        return "  \(enumName), // \(unicode) (\(hexcodeValueString)) \(annotation)"
+        return "  \(enumName),"
     }
 
     var keyDefinition: String {
-        return "#define \(keyName) (Key){ .raw = \(enumName) }"
+        return "#define \(keyName) (Key){ .raw = \(enumName) } // \(unicode) (\(hexcodeValueString)) \(annotation)"
     }
 
     var switchCase: String {
@@ -82,5 +83,11 @@ class Emoji: Decodable, Encodable {
 
     var userDefaultShortNameKey: String {
         return "shortname_\(hexcode)"
+    }
+}
+
+extension Emoji: Equatable {
+    static func == (lhs: Emoji, _: Emoji) -> Bool {
+        return lhs.unicode == lhs.unicode
     }
 }
