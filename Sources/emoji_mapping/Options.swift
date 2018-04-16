@@ -11,6 +11,7 @@ internal enum OutputType: String, CustomStringConvertible {
     case enumDefinitions = "enum"
     case keyDefinitions = "keys"
     case switchCases = "switch"
+    case readmeDots = "readme"
 
     var description: String {
         return rawValue
@@ -33,7 +34,7 @@ internal struct OptionKey {
                                   descriptionText: "Path to emoji file")
     static let type = OptionKey(short: "t",
                                 long: "type",
-                                descriptionText: "Output type [enum, kays switch]")
+                                descriptionText: "Output type [enum, kays switch, readme]")
     static let verbose = OptionKey(short: "v",
                                    long: "verbose",
                                    descriptionText: "Print more information about the execution")

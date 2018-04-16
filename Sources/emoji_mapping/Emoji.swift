@@ -54,11 +54,15 @@ class Emoji: Decodable, Encodable {
     }
 
     var keyDefinition: String {
-        return "#define \(keyName) (Key){ .raw = \(enumName) } // \(unicode) (\(hexcodeValueString)) \(annotation)"
+        return "#define \(keyName) EMOJI_KEY(\(enumName)) // \(unicode) (\(hexcodeValueString)) \(annotation)"
     }
 
     var switchCase: String {
         return "  case \(enumName):\n    return EmojiUnicode(\(hexcodeValueString));"
+    }
+
+    var readmeDot: String {
+        return "  * \(unicode) \(keyName)"
     }
 
     func chooseShortCode() -> String {

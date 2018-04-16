@@ -59,6 +59,8 @@ do {
             results.append(emoji.keyDefinition)
         case .switchCases:
             results.append(emoji.switchCase)
+        case .readmeDots:
+            results.append(emoji.readmeDot)
         }
     }
 
