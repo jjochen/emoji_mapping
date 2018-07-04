@@ -45,8 +45,12 @@ class Emoji: Decodable, Encodable {
         return "Key_Emoji\(keySuffix)"
     }
 
+    var enumNameSuffix: String {
+        return shortname.uppercased()
+    }
+
     var enumName: String {
-        return "EMOJI_\(shortname.uppercased())"
+        return "EMOJI_\(enumNameSuffix)"
     }
 
     var enumDefinition: String {
@@ -54,11 +58,19 @@ class Emoji: Decodable, Encodable {
     }
 
     var keyDefinition: String {
-        return "#define \(keyName) EMOJI_KEY(\(enumName)) // \(unicode) (\(hexcodeValueString)) \(annotation)"
+        return "#define \(keyName) EMOJI_KEY(\(enumNameSuffix)) // \(unicode) (\(hexcodeValueString)) \(annotation)"
     }
 
     var switchCase: String {
-        return "  case \(enumName):\n    return EmojiUnicode(\(hexcodeValueString));"
+        var components: [String] = []
+        for char in unicode.utf16 {
+            let hexString = String(char, radix: 16)
+            components.append("0x\(hexString)")
+        }
+        let size = components.count
+        let sequence = components.joined(separator: ", ")
+
+        return "  case \(enumName):\n    size = \(size);\n    sequence = new uint32_t[size]{\(sequence)};\n    break;"
     }
 
     var readmeDot: String {
